@@ -42,27 +42,45 @@ let track = {
 };
 
 
-var img;
+// var img;
 
 function preload() {
-	img = loadImage('./img/worstTriangle.png');
+	// img = loadImage('./img/worstTriangle.png');
 	
-	image(img, 0, 0);
+
+	// image(img, 0, 0);
 }
 
 /**
  * SETUP
  * Run once at begining
  */
-function setup() {
-	angleMode(DEGREES);
+
+
+function createBackground() {
 
 	let height = 200;
 
 	createCanvas(windowWidth, height);
-
 	background(color(255, 195, 77));
 
+	line(0, 0, windowWidth, 0);
+	line(0, height, windowWidth, height);
+
+	strokeWeight(2);
+	triangle((windowWidth/2)-10, 0, (windowWidth/2), 20, (windowWidth/2)+10, 0);
+	triangle((windowWidth/2)-10, height, (windowWidth/2), height-20, (windowWidth/2)+10, height);
+
+	line(windowWidth/2,20,windowWidth/2,height-20);
+
+	strokeWeight(4);
+	line(0, height/2, windowWidth, height/2);
+
+}
+function setup() {
+	angleMode(DEGREES);
+
+	createBackground();
 	timeStart = Date.now();
 
 	//Calcul du x du début de la 1ere ligne
