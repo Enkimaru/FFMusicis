@@ -3,51 +3,13 @@ let timeStart,
 	timeNext = 0,
 	aNotes = [];
 
-let track = {
-	lines: [
-		{
-			color: [255, 0, 0],
-			key: 'F'
-		},
-		{
-			color: [0, 255, 0],
-			key: 'G'
-		},
-		{
-			color: [0, 0, 255],
-			key: 'H'
-		},
-		{
-			color: [255, 255, 0],
-			key: 'J'
-		},
-		{
-			color: [255, 0, 255],
-			key: 'K'
-		}
-	],
-	speed: 1,
-	start: {
-		spacing: 20,
-		marginTop: 200,
-		overflow: 100,
-		size: 5
-	},
-	end: {
-		spacing: 100,
-		marginBottom: 200,
-		size: 20,
-		overflow: 50
-	}
-};
+var speed = 5;
+
 
 
 // var img;
-
 function preload() {
 	// img = loadImage('./img/worstTriangle.png');
-	
-
 	// image(img, 0, 0);
 }
 
@@ -56,16 +18,24 @@ function preload() {
  * Run once at begining
  */
 
+function setup() {
+	angleMode(DEGREES);
+	frameRate(60);
+
+	timeStart = Date.now();
+	$(".results").text("Width: " + windowWidth);
+}
 
 function createBackground() {
-
+	
 	let height = 200;
 
 	createCanvas(windowWidth, height);
 	background(color(255, 195, 77));
 
+
 	line(0, 0, windowWidth, 0);
-	line(0, height, windowWidth, height);
+	line(0, height-1, windowWidth, height-1);
 
 	strokeWeight(2);
 	triangle((windowWidth/2)-10, 0, (windowWidth/2), 20, (windowWidth/2)+10, 0);
@@ -75,44 +45,45 @@ function createBackground() {
 
 	strokeWeight(4);
 	line(0, height/2, windowWidth, height/2);
-
 }
-function setup() {
-	angleMode(DEGREES);
 
-	createBackground();
-	timeStart = Date.now();
-
-	//Calcul du x du début de la 1ere ligne
-	track.start.firstPosX = height / 2
-
-	//Calcul du x de la fin de la 1ere ligne
-	track.end.firstPosX = (height - (track.end.spacing * (track.lines.length - 1))) / 2;
-	
-	//Calcul de l'angle de chaque piste
-	for (var i = 0; i < track.lines.length; i++) {
-		let startX = track.start.firstPosX,
-			endX = track.end.firstPosX + (i * track.end.spacing);
-		if (startX !== endX) {
-			track.lines[i].tan = (height - track.start.marginTop - track.end.marginBottom) / (endX - startX);
-		} else {
-			track.lines[i].tan = null;
-		}
-	}
-
-	
-}
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    //resizeCanvas(windowWidth, windowHeight);
 }
 
 /**
  * DRAW
  * Run 60 times per second
  */
+let xPos = 0;
 function draw() {
+	if (xPos == 0) {
+		stopwatch.start();
+	}
 	
+	xPos = xPos + speed;
+		
+  if (xPos > width) {
+    xPos = 0;
+	}
+
+	if (xPos+10 >= width/2){
+		stopwatch.stop();
+		noLoop();
+	}
+	createBackground();
+
+	let randomNum = int(random(3));
+	console.log(randomNum);
+	if (randomNum == 0){
+		rect(xPos, (height/2)-10, 20, 20);
+	} else if (randomNum == 1) {
+		circle(xPos+10, (height/2), 10);
+	} else {
+		triangle(xPos,(height/2)+10,xPos+10,(height/2)-10,xPos+20,(height/2)+10);
+	}
+
 // 	//Temps écoulé depuis le début en milliseconde
 // timeElapsed = Date.now() - timeStart;
 // console.log(timeElapsed);
